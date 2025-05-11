@@ -48,6 +48,7 @@ namespace OpenXmlPowerTools
         public bool RestrictToSupportedNumberingFormats;
         public Dictionary<string, Func<string, int, string, string>> ListItemImplementations;
         public Func<ImageInfo, XElement> ImageHandler;
+        public Func<string, XElement> EquationHandler;
 
         public WmlToHtmlConverterSettings()
         {
@@ -72,6 +73,7 @@ namespace OpenXmlPowerTools
             RestrictToSupportedNumberingFormats = htmlConverterSettings.RestrictToSupportedNumberingFormats;
             ListItemImplementations = htmlConverterSettings.ListItemImplementations;
             ImageHandler = htmlConverterSettings.ImageHandler;
+            EquationHandler = htmlConverterSettings.EquationHandler;
         }
     }
 
@@ -87,6 +89,7 @@ namespace OpenXmlPowerTools
         public bool RestrictToSupportedNumberingFormats;
         public Dictionary<string, Func<string, int, string, string>> ListItemImplementations;
         public Func<ImageInfo, XElement> ImageHandler;
+        public Func<string, XElement> EquationHandler;
 
         public HtmlConverterSettings()
         {
@@ -506,6 +509,12 @@ namespace OpenXmlPowerTools
             if (element.Name == W.drawing || element.Name == W.pict || element.Name == W._object)
             {
                 return ProcessImage(wordDoc, element, settings.ImageHandler);
+            }
+
+            // Transform equations
+            if (element.Name == W.equation  || element.Name == W.oMath) // || element.Name == W._object
+            {
+                return ProcessEquation(wordDoc, element, settings.EquationHandler);
             }
 
             // Transform content controls.
@@ -3219,8 +3228,24 @@ namespace OpenXmlPowerTools
             return null;
         }
 
-        #endregion
+        public static XElement ProcessEquation(WordprocessingDocument wordDoc,
+                            XElement element, Func<string, XElement> equationHandler)
+        {
+            if (equationHandler == null)
+            {
+                return null;
+            }
+            if (element.Name == W.oMath || element.Name == W.equation)
+            {
+                var eqInfo = wordDoc.MainDocumentPart.Parts.FirstOrDefault(ke => ke.RelationshipId == "");
+                return equationHandler("");
+            }
+            return null;
+        }
     }
+
+    #endregion
+}
 
     public static class HtmlConverterExtensions
     {
@@ -3231,4 +3256,3 @@ namespace OpenXmlPowerTools
             style.Add(propName, value);
         }
     }
-}
