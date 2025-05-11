@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net45;net46;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +10,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="WindowsBase" />
+    <None Update="TemplateDocument.docx">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
+
+  <!--<ItemGroup>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>-->
 </Project>

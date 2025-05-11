@@ -21,10 +21,10 @@ namespace OpenXmlPowerTools
         static void Main(string[] args)
         {
             var n = DateTime.Now;
-            var tempDi = new DirectoryInfo(string.Format("ExampleOutput-{0:00}-{1:00}-{2:00}-{3:00}{4:00}{5:00}", n.Year - 2000, n.Month, n.Day, n.Hour, n.Minute, n.Second));
+            var tempDi = new DirectoryInfo("out"); //string.Format("ExampleOutput-{0:00}-{1:00}-{2:00}-{3:00}{4:00}{5:00}", n.Year - 2000, n.Month, n.Day, n.Hour, n.Minute, n.Second));
             tempDi.Create();
 
-            FileInfo templateDoc = new FileInfo("../../TemplateDocument.docx");
+            FileInfo templateDoc = new FileInfo("../../../TemplateDocument.docx");
             FileInfo dataFile = new FileInfo(Path.Combine(tempDi.FullName, "Data.xml"));
 
             // The following method generates a large data file with random data.
@@ -34,8 +34,9 @@ namespace OpenXmlPowerTools
 
             WmlDocument wmlDoc = new WmlDocument(templateDoc.FullName);
             int count = 1;
-            foreach (var customer in data.Elements("Customer"))
-            {
+            //foreach (var customer in data.Elements("Customer"))
+            //{
+            var customer= data.Elements("Customer").First(); // 1 run
                 FileInfo assembledDoc = new FileInfo(Path.Combine(tempDi.FullName, string.Format("Letter-{0:0000}.docx", count++)));
                 Console.WriteLine("Generating {0}", assembledDoc.Name);
                 bool templateError;
@@ -52,7 +53,7 @@ namespace OpenXmlPowerTools
 
                 Console.WriteLine("Converting back to DOCX {0}", htmlFileName.Name);
                 ConvertToDocx(htmlFileName.FullName, tempDi.FullName);
-            }
+            //}
         }
 
         private static string[] s_productNames = new[] {
@@ -182,6 +183,10 @@ namespace OpenXmlPowerTools
                                 imageInfo.AltText != null ?
                                     new XAttribute(NoNamespace.alt, imageInfo.AltText) : null);
                             return img;
+                        },
+                        EquationHandler = ke =>
+                        {
+                            return new XElement("math");
                         }
                     };
                     XElement htmlElement = WmlToHtmlConverter.ConvertToHtml(wDoc, settings);

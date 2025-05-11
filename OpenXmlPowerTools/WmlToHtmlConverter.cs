@@ -512,7 +512,8 @@ namespace OpenXmlPowerTools
             }
 
             // Transform equations
-            if (element.Name == W.equation  || element.Name == W.oMath) // || element.Name == W._object
+            //System.Diagnostics.Debug.Print(element.Name.ToString());
+            if (element.Name == W.equation  || element.Name == W.oMath || element.Name == W.oMathPara)
             {
                 return ProcessEquation(wordDoc, element, settings.EquationHandler);
             }
@@ -3235,10 +3236,10 @@ namespace OpenXmlPowerTools
             {
                 return null;
             }
-            if (element.Name == W.oMath || element.Name == W.equation)
+            if (element.Name == W.oMathPara || element.Name == W.oMath || element.Name == W.equation)
             {
-                var eqInfo = wordDoc.MainDocumentPart.Parts.FirstOrDefault(ke => ke.RelationshipId == "");
-                return equationHandler("");
+                //var eqInfo = wordDoc.MainDocumentPart.Parts.FirstOrDefault(ke => ke.RelationshipId == "");
+                return equationHandler(element.GetXmlNode().InnerXml);
             }
             return null;
         }

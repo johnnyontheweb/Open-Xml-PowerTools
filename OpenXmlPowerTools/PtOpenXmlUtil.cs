@@ -4677,6 +4677,7 @@ listSeparator
     {
         public static readonly XNamespace w =
             "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+        public static readonly XNamespace m = "http://schemas.openxmlformats.org/officeDocument/2006/math";
         public static readonly XName abstractNum = w + "abstractNum";
         public static readonly XName abstractNumId = w + "abstractNumId";
         public static readonly XName accent1 = w + "accent1";
@@ -5167,7 +5168,8 @@ listSeparator
         public static readonly XName _object = w + "object";
         public static readonly XName odso = w + "odso";
         public static readonly XName offsetFrom = w + "offsetFrom";
-        public static readonly XName oMath = w + "oMath";
+        public static readonly XName oMath = m + "oMath";
+        public static readonly XName oMathPara = m + "oMathPara";
         public static readonly XName optimizeForBrowser = w + "optimizeForBrowser";
         public static readonly XName orient = w + "orient";
         public static readonly XName original = w + "original";
